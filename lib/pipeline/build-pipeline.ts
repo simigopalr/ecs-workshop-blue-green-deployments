@@ -13,6 +13,7 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as codePipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codePipelineActions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as codeDeploy from 'aws-cdk-lib/aws-codedeploy';
 
 export interface EcsBlueGreenPipelineProps {
     readonly codeRepoName?: string;
@@ -118,7 +119,7 @@ export class EcsBlueGreenPipeline extends Construct {
             apiName: props.apiName
         });
 
-        const ecsBlueGreenDeploymentGroup = new EcsBlueGreenDeploymentGroup(this, 'ecsApplication', {
+        /*const ecsBlueGreenDeploymentGroup = new EcsBlueGreenDeploymentGroup(this, 'ecsApplication', {
             ecsClusterName: props.cluster?.clusterName,
             ecsServiceName: ecsBlueGreenService.ecsService.serviceName,
             prodListenerArn: ecsBlueGreenService.albProdListener.listenerArn,
@@ -129,6 +130,17 @@ export class EcsBlueGreenPipeline extends Construct {
             deploymentConfigName: props.deploymentConfigName,
             deploymentGroupName: props.apiName,
             targetGroupAlarms: ecsServiceAlarms.targetGroupAlarms
+        });*/
+        
+        const ecsBlueGreenDeploymentGroup = new codeDeploy.EcsDeploymentGroup(this, 'newecsDeploymentGroup', {
+            service: ecsBlueGreenService.ecsService,
+            blueGreenDeploymentConfig: {
+                blueTargetGroup: ecsBlueGreenService.blueTargetGroup,
+                greenTargetGroup: ecsBlueGreenService.greenTargetGroup,
+                listener: ecsBlueGreenService.albProdListener,
+                testListener: ecsBlueGreenService.albTestListener
+              },
+              deploymentConfig: codeDeploy.EcsDeploymentConfig.fromEcsDeploymentConfigName(this, 'ecsDeploymentConfig', props.deploymentConfigName!)
         });
 
         // Code Pipeline - CloudWatch trigger event is created by CDK
@@ -163,7 +175,7 @@ export class EcsBlueGreenPipeline extends Construct {
                     actions: [
                         new codePipelineActions.CodeDeployEcsDeployAction({
                             actionName: 'Deploy',
-                            deploymentGroup: ecsBlueGreenDeploymentGroup.ecsDeploymentGroup,
+                            deploymentGroup: ecsBlueGreenDeploymentGroup,
                             appSpecTemplateInput: buildArtifact,
                             taskDefinitionTemplateInput: buildArtifact,
                         })
