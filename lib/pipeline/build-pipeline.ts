@@ -185,12 +185,17 @@ export class EcsBlueGreenPipeline extends Construct {
         });
 
         pipeline.node.addDependency(ecsBlueGreenDeploymentGroup);
-
+        
         // Export the outputs
         new CfnOutput(this, 'ecsBlueGreenLBDns', {
             description: 'Load balancer DNS',
             exportName: 'ecsBlueGreenLBDns',
             value: ecsBlueGreenService.alb.loadBalancerDnsName
+        });
+        new CfnOutput(this, 'blueGreenPipeline', {
+            description: 'Blue Green Deployment Pipeline',
+            exportName: 'blueGreenPipeline',
+            value: pipeline.pipelineName
         });
 
     }

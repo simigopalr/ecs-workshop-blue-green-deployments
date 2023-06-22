@@ -33,6 +33,14 @@ export class EcsBlueGreenService extends Construct {
 
     constructor(scope: Construct, id: string, props: EcsBlueGreenServiceProps = {}) {
         super(scope, id);
+        
+        const logging = new ecs.AwsLogDriver({
+                logGroup: new log.LogGroup(this, 'apiLogGroup', {
+                    logGroupName: '/ecs/'.concat(props.apiName!),
+                    removalPolicy: RemovalPolicy.DESTROY
+                }),
+                streamPrefix: EcsBlueGreenService.PREFIX
+            });
 
         // Creating the task definition
         const taskDefinition = new ecs.FargateTaskDefinition(this, 'apiTaskDefinition', {
@@ -43,14 +51,7 @@ export class EcsBlueGreenService extends Construct {
             executionRole: props.ecsTaskRole
         });
         taskDefinition.addContainer('apiContainer', {
-            image: ecs.ContainerImage.fromEcrRepository(props.ecrRepository!),
-            logging: new ecs.AwsLogDriver({
-                logGroup: new log.LogGroup(this, 'apiLogGroup', {
-                    logGroupName: '/ecs/'.concat(props.apiName!),
-                    removalPolicy: RemovalPolicy.DESTROY
-                }),
-                streamPrefix: EcsBlueGreenService.PREFIX
-            }),
+            image: ecs.ContainerImage.fromEcrRepository(props.ecrRepository!, 'latest')
         }).addPortMappings({
             containerPort: props.containerPort!,
             protocol: ecs.Protocol.TCP
