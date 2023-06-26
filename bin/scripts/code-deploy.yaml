@@ -1,0 +1,15 @@
+applicationName: 'AppECS-SGR-BG-Cluster-sgr-bg-service2'
+deploymentGroupName: 'DgpECS-SGR-BG-Cluster-sgr-bg-service2'
+revision:
+  revisionType: AppSpecContent
+  appSpecContent:
+    content: |
+      version: 0.0
+      Resources:
+        - TargetService:
+            Type: AWS::ECS::Service
+            Properties:
+              TaskDefinition: "arn:aws:ecs:ap-southeast-2:117134819170:task-definition/sgr-bg-task-def:1"
+              LoadBalancerInfo:
+                ContainerName: "sample-app"
+                ContainerPort: 80

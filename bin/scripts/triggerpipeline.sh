@@ -5,12 +5,6 @@
 # SPDX-License-Identifier: MIT-0                                     #
 ######################################################################
 
-#############################################################################
-# CodePipeline resources
-##############################################################################
-
-#cdk --app "npx ts-node bin/pipeline-stack.ts" deploy --require-approval never
-
 export AWS_ACCOUNT_ID=117134819170
 export AWS_DEFAULT_REGION=ap-southeast-2
 
