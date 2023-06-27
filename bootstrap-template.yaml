@@ -14,7 +14,7 @@ Parameters:
     Type: CommaDelimitedList
   FileAssetsBucketName:
     Description: The name of the S3 bucket used for file assets
-    Default: "ato-custom-s3bucket"
+    Default: "poc-custom-s3bucket"
     Type: String
   FileAssetsBucketKmsKeyId:
     Description: Empty to create a new key (default), 'AWS_MANAGED_KEY' to use a managed S3 key, or the ID/ARN of an existing key.
@@ -22,11 +22,11 @@ Parameters:
     Type: String
   ContainerAssetsRepositoryName:
     Description: A user-provided custom name to use for the container assets ECR repository
-    Default: "ato-custom-ecrrepo"
+    Default: "poc-custom-ecrrepo"
     Type: String
   Qualifier:
     Description: An identifier to distinguish multiple bootstrap stacks in the same environment
-    Default: ato659isf
+    Default: poc659isf
     Type: String
     AllowedPattern: "[A-Za-z0-9_-]{1,10}"
     ConstraintDescription: Qualifier must be an alphanumeric identifier of at most 10 characters
@@ -49,8 +49,8 @@ Parameters:
     Type: String
   BootstrapVariant:
     Type: String
-    Default: "AWS CDK: Default Resources"
-    Description: Describe the provenance of the resources in this bootstrap stack. Change this when you customize the template. To prevent accidents, the CDK CLI will not overwrite bootstrap stacks with a different variant.
+    Default: Custom Resources
+    Description: Custom variant.
 Conditions:
   HasTrustedAccounts:
     Fn::Not:

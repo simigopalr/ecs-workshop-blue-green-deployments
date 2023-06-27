@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import 'source-map-support/register';
-import { App } from 'aws-cdk-lib';
+import { App, DefaultStackSynthesizer } from 'aws-cdk-lib';
 import { BlueGreenContainerImageStack } from '../lib/bluegreen-container.stack';
 import { BlueGreenPipelineStack } from '../lib/bluegreen-pipeline-stack';
 
@@ -19,7 +19,13 @@ const cidr = '10.0.0.0/16';
 new BlueGreenContainerImageStack(app, 'BlueGreenContainerImageStack', {
     description: 'Builds the blue/green deployment container build stack',
     env: testenv,
-    repo: codeRepoName
+    repo: codeRepoName,
+    synthesizer: new DefaultStackSynthesizer({
+        qualifier: 'poc659isf',
+        fileAssetsBucketName: 'poc-custom-s3bucket', // more likely e.g. 'cdk-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}'
+        bucketPrefix: '',
+        imageAssetsRepositoryName: 'poc-custom-ecrrepo'
+  })
 });
 
 new BlueGreenPipelineStack(app, 'BlueGreenPipelineStack', {
@@ -27,5 +33,11 @@ new BlueGreenPipelineStack(app, 'BlueGreenPipelineStack', {
     env: testenv,
     apiName,
     containerPort,
-    cidr
+    cidr,
+    synthesizer: new DefaultStackSynthesizer({
+        qualifier: 'ato659isf',
+        fileAssetsBucketName: 'poc-custom-s3bucket', // more likely e.g. 'cdk-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}'
+        bucketPrefix: '',
+        imageAssetsRepositoryName: 'poc-custom-ecrrepo'
+  })
 });
