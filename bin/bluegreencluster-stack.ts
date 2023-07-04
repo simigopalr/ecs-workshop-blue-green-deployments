@@ -22,9 +22,12 @@ new BlueGreenContainerImageStack(app, 'BlueGreenContainerImageStack', {
     repo: codeRepoName,
     synthesizer: new DefaultStackSynthesizer({
         qualifier: 'poc659isf',
-        fileAssetsBucketName: 'poc-custom-s3bucket', // more likely e.g. 'cdk-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}'
+        fileAssetsBucketName: 'poc-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}', 
         bucketPrefix: '',
-        imageAssetsRepositoryName: 'poc-custom-ecrrepo'
+        imageAssetsRepositoryName: 'poc-${Qualifier}-container-assets-${AWS::AccountId}-${AWS::Region}',
+        lookupRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-lookup-role-117134819170-ap-southeast-2',
+        fileAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-file-publishing-role-117134819170-ap-southeast-2',
+        imageAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-image-publishing-role-117134819170-ap-southeast-2'
   })
 });
 
@@ -35,9 +38,12 @@ new BlueGreenPipelineStack(app, 'BlueGreenPipelineStack', {
     containerPort,
     cidr,
     synthesizer: new DefaultStackSynthesizer({
-        qualifier: 'ato659isf',
-        fileAssetsBucketName: 'poc-custom-s3bucket', // more likely e.g. 'cdk-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}'
+        qualifier: 'poc659isf',
+        fileAssetsBucketName: 'poc-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}',
         bucketPrefix: '',
-        imageAssetsRepositoryName: 'poc-custom-ecrrepo'
+        imageAssetsRepositoryName: 'poc-${Qualifier}-container-assets-${AWS::AccountId}-${AWS::Region}',
+        lookupRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-lookup-role-117134819170-ap-southeast-2',
+        fileAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-file-publishing-role-117134819170-ap-southeast-2',
+        imageAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-image-publishing-role-117134819170-ap-southeast-2'
   })
 });

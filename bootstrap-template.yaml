@@ -14,7 +14,7 @@ Parameters:
     Type: CommaDelimitedList
   FileAssetsBucketName:
     Description: The name of the S3 bucket used for file assets
-    Default: "poc-custom-s3bucket"
+    Default: Custom
     Type: String
   FileAssetsBucketKmsKeyId:
     Description: Empty to create a new key (default), 'AWS_MANAGED_KEY' to use a managed S3 key, or the ID/ARN of an existing key.
@@ -22,7 +22,7 @@ Parameters:
     Type: String
   ContainerAssetsRepositoryName:
     Description: A user-provided custom name to use for the container assets ECR repository
-    Default: "poc-custom-ecrrepo"
+    Default: Custom
     Type: String
   Qualifier:
     Description: An identifier to distinguish multiple bootstrap stacks in the same environment
@@ -173,7 +173,7 @@ Resources:
       BucketName:
         Fn::If:
           - HasCustomFileAssetsBucketName
-          - Fn::Sub: ${FileAssetsBucketName}
+          - Fn::Sub: poc-${Qualifier}-assets-117134819170-ap-southeast-2
           - Fn::Sub: cdk-${Qualifier}-assets-117134819170-ap-southeast-2
       AccessControl: Private
       BucketEncryption:
@@ -249,7 +249,7 @@ Resources:
       RepositoryName:
         Fn::If:
           - HasCustomContainerAssetsRepositoryName
-          - Fn::Sub: ${ContainerAssetsRepositoryName}
+          - Fn::Sub: poc-${Qualifier}-container-assets-117134819170-ap-southeast-2
           - Fn::Sub: cdk-${Qualifier}-container-assets-117134819170-ap-southeast-2
       RepositoryPolicyText:
         Version: "2012-10-17"
@@ -284,7 +284,7 @@ Resources:
                     Ref: TrustedAccounts
               - Ref: AWS::NoValue
       RoleName:
-        Fn::Sub: cdk-${Qualifier}-file-publishing-role-117134819170-ap-southeast-2
+        Fn::Sub: poc-${Qualifier}-file-publishing-role-117134819170-ap-southeast-2
       Tags:
         - Key: aws-cdk:bootstrap-role
           Value: file-publishing
@@ -307,7 +307,7 @@ Resources:
                     Ref: TrustedAccounts
               - Ref: AWS::NoValue
       RoleName:
-        Fn::Sub: cdk-${Qualifier}-image-publishing-role-117134819170-ap-southeast-2
+        Fn::Sub: poc-${Qualifier}-image-publishing-role-117134819170-ap-southeast-2
       Tags:
         - Key: aws-cdk:bootstrap-role
           Value: image-publishing
@@ -338,7 +338,7 @@ Resources:
                     Ref: TrustedAccounts
               - Ref: AWS::NoValue
       RoleName:
-        Fn::Sub: cdk-${Qualifier}-lookup-role-117134819170-ap-southeast-2
+        Fn::Sub: poc-${Qualifier}-lookup-role-117134819170-ap-southeast-2
       ManagedPolicyArns:
         - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/ReadOnlyAccess
       Policies:
@@ -350,7 +350,7 @@ Resources:
                   - kms:Decrypt
                 Resource: "*"
             Version: "2012-10-17"
-          PolicyName: LookupRolePolicy
+          PolicyName: PocLookupRolePolicy
       Tags:
         - Key: aws-cdk:bootstrap-role
           Value: lookup
@@ -387,7 +387,7 @@ Resources:
       Roles:
         - Ref: FilePublishingRole
       PolicyName:
-        Fn::Sub: cdk-${Qualifier}-file-publishing-role-default-policy-117134819170-ap-southeast-2
+        Fn::Sub: poc-${Qualifier}-file-publishing-role-default-policy-117134819170-ap-southeast-2
   ImagePublishingRoleDefaultPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -414,7 +414,7 @@ Resources:
       Roles:
         - Ref: ImagePublishingRole
       PolicyName:
-        Fn::Sub: cdk-${Qualifier}-image-publishing-role-default-policy-117134819170-ap-southeast-2
+        Fn::Sub: poc-${Qualifier}-image-publishing-role-default-policy-117134819170-ap-southeast-2
   DeploymentActionRole:
     Type: AWS::IAM::Role
     Properties:
