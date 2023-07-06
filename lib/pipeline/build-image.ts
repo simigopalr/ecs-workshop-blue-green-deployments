@@ -7,6 +7,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as codeCommit from 'aws-cdk-lib/aws-codecommit';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as codeBuild from 'aws-cdk-lib/aws-codebuild';
+import * as s3 from 'aws-cdk-lib/aws-s3'
 
 export interface EcsBlueGreenBuildImageProps {
     readonly codeRepoName?: string;
@@ -35,7 +36,9 @@ export class EcsBlueGreenBuildImage extends Construct {
             repositoryName: props.codeRepoName!,
             description: props.codeRepoDesc!
         });
-
+        
+        //const artifactBucket = s3.Bucket.fromBucketName(this, 'codebuild-artifact-bucket', 'cdk-hnb659fds-assets-117134819170-ap-southeast-2');
+        
         // Creating the code build project
         this.codeBuildProject = new codeBuild.Project(this, 'codeBuild', {
             role: props.codeBuildRole,

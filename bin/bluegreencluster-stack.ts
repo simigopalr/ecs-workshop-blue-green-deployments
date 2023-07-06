@@ -21,13 +21,8 @@ new BlueGreenContainerImageStack(app, 'BlueGreenContainerImageStack', {
     env: testenv,
     repo: codeRepoName,
     synthesizer: new DefaultStackSynthesizer({
-        qualifier: 'poc659isf',
-        fileAssetsBucketName: 'poc-${Qualifier}-assets-${AWS::AccountId}-${AWS::Region}', 
-        bucketPrefix: '',
-        imageAssetsRepositoryName: 'poc-${Qualifier}-container-assets-${AWS::AccountId}-${AWS::Region}',
-        lookupRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-lookup-role-117134819170-ap-southeast-2',
-        fileAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-file-publishing-role-117134819170-ap-southeast-2',
-        imageAssetPublishingRoleArn: 'arn:${AWS::Partition}:iam::117134819170:role/poc-${Qualifier}-image-publishing-role-117134819170-ap-southeast-2'
+        generateBootstrapVersionRule: false
+
   })
 });
 
